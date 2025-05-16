@@ -1,4 +1,4 @@
-# 🪙 CryptoWatch – Real-Time Crypto Tracker (Android)
+# 🪙 CryptoWatch – Real-Time Crypto Tracker [MVVM+HILT+ROOMDB+RETROFIT]
 
 **CryptoWatch** is a cryptocurrency tracking Android application I built as a learning project to explore **clean architecture (MVVM)** with **Retrofit**, **RoomDB**, and **Hilt**. It fetches real-time crypto market data from the **[CoinGecko API](https://www.coingecko.com/en/api)** and allows users to browse trending coins, search for tokens, and save favorites locally.
 
