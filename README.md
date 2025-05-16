@@ -14,7 +14,6 @@ As an Android developer, I wanted to create something meaningful while solidifyi
 - **RoomDB** for local storage
 - **Hilt** for dependency injection and testability
 - **LiveData + ViewModel** lifecycle management
-- **Jetpack Navigation** for fragment transitions
 
 This project also introduced me to good UI practices using `RecyclerView`, `Glide` for image loading, and a scalable repo-pattern-based data layer.
 
