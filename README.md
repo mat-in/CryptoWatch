@@ -30,7 +30,6 @@ This project also introduced me to good UI practices using `RecyclerView`, `Glid
 | Image Loading | Glide                                |
 | Local Storage | Room Database (planned for watchlist)|
 | DI            | Hilt                                 |
-| Navigation    | Jetpack Navigation Component         |
 
 ---
 
@@ -86,9 +85,9 @@ CryptoWatch/
 ## 🛠️ How to Run
 
 1. **Clone this repository**
-   ```bash
+   ```
    git clone https://github.com/your-username/CryptoWatch.git
-````
+   ```
 
 2. **Open in Android Studio**
 
@@ -102,7 +101,6 @@ CryptoWatch/
 
 * ✅ Trending, Search, and Saved features implemented
 * 🧠 Coming Soon:
-
   * RoomDB-backed persistence
   * Portfolio simulator
   * Candlestick chart (MPAndroidChart)
