@@ -79,9 +79,8 @@ CryptoWatch/
 |---------|--------|
 | ![Trending](screenshots/trending.png) | ![Search](screenshots/search.png) |
 | Saved | Chart |
-|-------|-------|
 | ![Saved](screenshots/saved.png) | ![Chart](screenshots/chart.png) |
----
+
 
 ## 🛠️ How to Run
 
