@@ -59,7 +59,7 @@ Some of the endpoints I use:
 
 ## 🏗️ Project Structure
 
-
+```
 CryptoWatch/
 ├── data/
 │   ├── retrofit/     # API models and service
@@ -74,15 +74,17 @@ CryptoWatch/
 │   └── saved/
 ├── utils/            # RecyclerView adapters, UI helpers
 
-
+```
 ---
 
 ## 📸 UI Screenshots
 
-| Trending | Search | Saved | Chart |
-|---------|--------|-------|-------|
-| ![Trending](screenshots/trending.png) | ![Search](screenshots/search.png) | ![Saved](screenshots/saved.png) | ![Chart](screenshots/chart.png) |
-
+| Trending | Search 
+|---------|--------|
+| ![Trending](screenshots/trending.png) | ![Search](screenshots/search.png) |
+| Saved | Chart |
+|-------|-------|
+| ![Saved](screenshots/saved.png) | ![Chart](screenshots/chart.png) |
 ---
 
 ## 🛠️ How to Run
