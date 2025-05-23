@@ -70,4 +70,5 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.glide)
     kapt(libs.compiler)
+    implementation(libs.mpandroidchart)
 }

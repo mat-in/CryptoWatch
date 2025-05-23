@@ -1,7 +1,6 @@
 package io.matin.cryptowatch.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +9,11 @@ import io.matin.cryptowatch.data.retrofit.SearchCoinResponse
 import io.matin.cryptowatch.data.retrofit.TrendingCoinResponse
 import io.matin.cryptowatch.repo.CoinRepository
 import io.matin.cryptowatch.repo.SearchRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,43 +23,31 @@ class CoiniViewModel @Inject constructor(
     private val searchRepository: SearchRepository
 ): ViewModel() {
 
-    val trendingLiveData = MutableLiveData<TrendingCoinResponse>()
-    val searchLiveData = MutableLiveData<SearchCoinResponse>()
-
-    val getAll = searchRepository.getAll
-
-    fun getTrending(){
-        viewModelScope.launch {
+    //RETROFIT
+    fun getTrending(): Flow<TrendingCoinResponse> = flow{
             val trendingResponse = coinRepository.getTrending()
             Log.d("CoiniViewModel", "API Response: ${trendingResponse.body()}")
-            try {
-                trendingLiveData.postValue(trendingResponse.body())
+            if (trendingResponse.isSuccessful && trendingResponse.body()!=null){
+                delay(500L)
+                emit(trendingResponse.body()!!)
+            }else {
+                throw Exception("Error fetching trending coins: ${trendingResponse.errorBody()?.string()}")
             }
-            catch(e: Exception){
-                Log.e("Trending Error:", e.message.toString())
-            }
+    }.flowOn(Dispatchers.IO)
+
+    fun getSearch(query: String): Flow<SearchCoinResponse> = flow {
+        val searchResponse = coinRepository.getSearch(query)
+        Log.d("CoiniViewModel", "API Response: ${searchResponse.body()}")
+        if (searchResponse.isSuccessful && searchResponse.body()!=null){
+            delay(500L)
+            emit(searchResponse.body()!!)
+        }else{
+            throw Exception("Error fetching trending coins: ${searchResponse.errorBody()?.string()}")
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
-
-    fun getSearch(query: String) {
-        viewModelScope.launch {
-            try {
-                val response = coinRepository.getSearch(query)
-
-                if (response.isSuccessful && response.body() != null) {
-                    searchLiveData.postValue(response.body())
-                    Log.d("Search", "Search success: ${response.body()}")
-                } else {
-                    Log.e("SearchError", "Response not successful: ${response.code()} ${response.message()}")
-                }
-
-            } catch (e: Exception) {
-                Log.e("SearchError", "Exception occurred", e)
-            }
-        }
-    }
-
+    //ROOM
+    val getAll = searchRepository.getAll
     fun insert(searchCoin: SearchCoin){
         viewModelScope.launch {
             searchRepository.insert(searchCoin)
@@ -66,4 +58,14 @@ class CoiniViewModel @Inject constructor(
             searchRepository.delete(searchCoin)
         }
     }
+
+    fun getOHLCData(coinId: String, vsCurrency: String, days: Int): Flow<List<List<Double>>> = flow {
+        val response = coinRepository.getOHLCData(coinId, vsCurrency, days)
+        if (response.isSuccessful && response.body() != null) {
+            emit(response.body()!!)
+        } else {
+            throw Exception("Failed to fetch OHLC data")
+        }
+    }.flowOn(Dispatchers.IO)
+
 }

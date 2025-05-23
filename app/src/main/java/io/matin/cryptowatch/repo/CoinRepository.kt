@@ -18,4 +18,7 @@ class CoinRepository @Inject constructor(private val coinService: CoinService) {
         return coinService.getSearch(query)
     }
 
+    suspend fun getOHLCData(coinId: String, vsCurrency: String, days: Int): Response<List<List<Double>>>{
+        return coinService.getOHLCdata(coinId,vsCurrency,days)
+    }
 }

@@ -24,8 +24,6 @@ abstract class SearchDatabase: RoomDatabase() {
                 INSTANCE = instance
                 instance
             }
-
         }
-
     }
 }

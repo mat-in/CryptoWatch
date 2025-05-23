@@ -11,11 +11,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.matin.cryptowatch.R
-import io.matin.cryptowatch.repo.CoinRepository
-import io.matin.cryptowatch.repo.SearchRepository
 import io.matin.cryptowatch.utils.SavedCoinsAdapter
 import io.matin.cryptowatch.viewmodel.CoiniViewModel
-import javax.inject.Inject
 
 /**
  * A simple [androidx.fragment.app.Fragment] subclass.

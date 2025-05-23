@@ -16,10 +16,10 @@ interface CoinService {
         @Query("query") query: String
     ): Response<SearchCoinResponse>
 
-//    @GET("coins/{id}/market_chart")
-//    suspend fun getDetail(
-//        @Path("id") id: String,
-//        @Query("vs_currency") vsCurrency: String,
-//        @Query("days") days: String
-//    )
+    @GET("coins/{id}/ohlc")
+    suspend fun getOHLCdata(
+        @Path("id") coinId: String,
+        @Query("vs_currency") vsCurrency: String,
+        @Query("days") days: Int
+    ): Response<List<List<Double>>>
 }

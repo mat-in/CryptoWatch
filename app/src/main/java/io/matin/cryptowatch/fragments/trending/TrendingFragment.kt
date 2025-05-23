@@ -6,13 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.matin.cryptowatch.R
+import io.matin.cryptowatch.fragments.chart.CandleChart
 import io.matin.cryptowatch.repo.CoinRepository
 import io.matin.cryptowatch.utils.TrendingRecyclerViewAdapter
 import io.matin.cryptowatch.viewmodel.CoiniViewModel
+import kotlinx.coroutines.async
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,22 +39,27 @@ class TrendingFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(
             context, LinearLayoutManager.VERTICAL, false
         )
+        trendingRecyclerViewAdapter = TrendingRecyclerViewAdapter(emptyList()) { selectedCoin ->
+            val bundle = Bundle().apply {
+                putString("coin_id", selectedCoin.id)
+            }
+            val chartFragment = CandleChart()
+            chartFragment.arguments = bundle
 
-        trendingRecyclerViewAdapter = TrendingRecyclerViewAdapter(emptyList())
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment, chartFragment)
+                .addToBackStack(null)
+                .commit()
+        }
         recyclerView.adapter = trendingRecyclerViewAdapter
 
-        observeTrending()
-        coinViewModel.getTrending()
+        lifecycleScope.async {
+            coinViewModel.getTrending().collect {trendingResponse ->
+                val results = trendingResponse.coins.map { it.item }
+                trendingRecyclerViewAdapter.updateData(results)
+            }
+        }
 
         return view
     }
-
-
-    private fun observeTrending() {
-        coinViewModel.trendingLiveData.observe(viewLifecycleOwner) { response ->
-            val coinList = response?.coins?.map { it.item } ?: emptyList()
-            trendingRecyclerViewAdapter.updateData(coinList)
-        }
-    }
-
 }

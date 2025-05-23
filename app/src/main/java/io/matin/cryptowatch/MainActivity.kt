@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         loadFragment(TrendingFragment())
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
-
         bottomNav.setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.nav_trending -> loadFragment(TrendingFragment())
@@ -36,7 +35,6 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-
     fun loadFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction()
             .replace(R.id.nav_host_fragment, fragment)

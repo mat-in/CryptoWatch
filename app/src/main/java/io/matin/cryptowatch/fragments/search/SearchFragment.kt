@@ -7,13 +7,15 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.matin.cryptowatch.R
-import io.matin.cryptowatch.utils.SearchRecyclerViewAdapter
 import io.matin.cryptowatch.repo.CoinRepository
+import io.matin.cryptowatch.utils.SearchRecyclerViewAdapter
 import io.matin.cryptowatch.viewmodel.CoiniViewModel
+import kotlinx.coroutines.async
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,8 +43,13 @@ class SearchFragment : Fragment() {
         val searchView = view.findViewById<SearchView>(R.id.searchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!query.isNullOrBlank()) {
-                    coiniViewModel.getSearch(query)
+                query?.let {
+                    lifecycleScope.async {
+                        coiniViewModel.getSearch(query.toString()).collect {searchResponse ->
+                            val results = searchResponse.coins.map { it }
+                            searchRecyclerViewAdapter.updateList(results)
+                        }
+                    }
                 }
                 return true
             }
@@ -51,12 +58,6 @@ class SearchFragment : Fragment() {
             }
         })
 
-        coiniViewModel.searchLiveData.observe(viewLifecycleOwner) { searchResponse ->
-            val parsedCoins = searchResponse?.coins?.mapNotNull { it }
-                ?: emptyList()
-            searchRecyclerViewAdapter.updateList(parsedCoins)
-        }
-
         searchRecyclerViewAdapter.onBookmarkClicked = { coin, isBookmarked ->
             if (isBookmarked) {
                 coiniViewModel.insert(coin)
@@ -64,7 +65,6 @@ class SearchFragment : Fragment() {
                 coiniViewModel.delete(coin)
             }
         }
-
         return view
     }
 }

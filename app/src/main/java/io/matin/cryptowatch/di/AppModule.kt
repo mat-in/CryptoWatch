@@ -7,13 +7,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.matin.cryptowatch.BuildConfig
 import io.matin.cryptowatch.data.retrofit.CoinService
 import io.matin.cryptowatch.data.room.SearchDAO
 import io.matin.cryptowatch.data.room.SearchDatabase
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+import java.util.concurrent.TimeUnit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -24,8 +25,11 @@ object AppModule {
     @Provides
     @Singleton
     fun providesRetrofit(): Retrofit {
+        val builder = OkHttpClient.Builder()
+        builder.callTimeout(1000, TimeUnit.SECONDS)
         return Retrofit.Builder()
             .baseUrl(BASEURL)
+            .client(builder.build())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
     }
@@ -48,5 +52,4 @@ object AppModule {
             SearchDAO {
         return searchDatabase.searchDao()
     }
-
 }

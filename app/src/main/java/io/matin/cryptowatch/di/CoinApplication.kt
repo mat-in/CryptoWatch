@@ -1,4 +1,4 @@
-package io.matin.cryptowatch
+package io.matin.cryptowatch.di
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
