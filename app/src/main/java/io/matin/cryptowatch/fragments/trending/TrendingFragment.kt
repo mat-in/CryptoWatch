@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.matin.cryptowatch.R
+import io.matin.cryptowatch.data.retrofit.TrendingCoin
 import io.matin.cryptowatch.fragments.chart.CandleChart
 import io.matin.cryptowatch.repo.CoinRepository
 import io.matin.cryptowatch.utils.TrendingRecyclerViewAdapter
@@ -19,7 +20,7 @@ import kotlinx.coroutines.async
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TrendingFragment : Fragment() {
+class TrendingFragment() : Fragment() {
 
     lateinit var trendingRecyclerViewAdapter: TrendingRecyclerViewAdapter
     lateinit var recyclerView: RecyclerView
@@ -42,15 +43,16 @@ class TrendingFragment : Fragment() {
         trendingRecyclerViewAdapter = TrendingRecyclerViewAdapter(emptyList()) { selectedCoin ->
             val bundle = Bundle().apply {
                 putString("coin_id", selectedCoin.id)
+                putString("coin_name", selectedCoin.name)
             }
-            val chartFragment = CandleChart()
-            chartFragment.arguments = bundle
-
+            val fragment = CandleChart.newInstance(selectedCoin.id, selectedCoin.name)
             parentFragmentManager.beginTransaction()
-                .replace(R.id.nav_host_fragment, chartFragment)
+                .replace(R.id.nav_host_fragment, fragment)
                 .addToBackStack(null)
                 .commit()
+
         }
+
         recyclerView.adapter = trendingRecyclerViewAdapter
 
         lifecycleScope.async {
@@ -61,5 +63,7 @@ class TrendingFragment : Fragment() {
         }
 
         return view
+
     }
+
 }

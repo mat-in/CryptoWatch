@@ -15,6 +15,7 @@ import com.github.mikephil.charting.data.CandleDataSet
 import com.github.mikephil.charting.data.CandleEntry
 import dagger.hilt.android.AndroidEntryPoint
 import io.matin.cryptowatch.R
+import io.matin.cryptowatch.data.retrofit.TrendingCoin
 import io.matin.cryptowatch.databinding.FragmentCandleChartBinding
 import io.matin.cryptowatch.viewmodel.CoiniViewModel
 import kotlinx.coroutines.launch
@@ -27,6 +28,31 @@ class CandleChart : Fragment() {
 
     private val viewModel: CoiniViewModel by viewModels()
     private val candleEntries = mutableListOf<CandleEntry>()
+
+    companion object {
+        private const val ARG_COIN_ID = "coin_id"
+        private const val ARG_COIN_NAME = "coin_name"
+
+        fun newInstance(coinId: String, coinName: String): CandleChart {
+            val fragment = CandleChart()
+            val args = Bundle()
+            args.putString(ARG_COIN_ID, coinId)
+            args.putString(ARG_COIN_NAME, coinName)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    private lateinit var coinId: String
+    private lateinit var coinName: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            coinId = it.getString(ARG_COIN_ID) ?: "bitcoin"
+            coinName = it.getString(ARG_COIN_NAME) ?: "Bitcoin"
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +68,7 @@ class CandleChart : Fragment() {
         setupChart()
 
         lifecycleScope.launch {
-            viewModel.getOHLCData("bitcoin", "usd", 1).collect { ohlcData ->
+            viewModel.getOHLCData(coinId, "inr", 365).collect { ohlcData ->
                 candleEntries.clear()
                 ohlcData.forEachIndexed { index, candle ->
                     val x = index.toFloat()
@@ -69,7 +95,7 @@ class CandleChart : Fragment() {
     }
 
     private fun updateChart() {
-        val dataSet = CandleDataSet(candleEntries, "Bitcoin")
+        val dataSet = CandleDataSet(candleEntries, coinName)
         dataSet.color = Color.rgb(80, 80, 80)
         dataSet.shadowColor = Color.DKGRAY
         dataSet.shadowWidth = 0.7f
