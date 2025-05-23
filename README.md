@@ -1,3 +1,7 @@
+Here's your updated `README.md` with candle chart support added and the new screenshot included:
+
+---
+
 # 🪙 CryptoWatch – Real-Time Crypto Tracker [MVVM+HILT+ROOMDB+RETROFIT]
 
 **CryptoWatch** is a cryptocurrency tracking Android application I built as a learning project to explore **clean architecture (MVVM)** with **Retrofit**, **RoomDB**, and **Hilt**. It fetches real-time crypto market data from the **[CoinGecko API](https://www.coingecko.com/en/api)** and allows users to browse trending coins, search for tokens, and save favorites locally.
@@ -37,6 +41,7 @@ This project also introduced me to good UI practices using `RecyclerView`, `Glid
 - 🔥 **Trending Coins** – Fetched from `/search/trending` endpoint of CoinGecko.
 - 🔍 **Search** – Search coins with live suggestions using `/search`.
 - 💾 **Saved Coins** – Locally persist your favorite coins for quick access.
+- 📈 **Candlestick Chart** – Visualize coin price trends with MPAndroidChart.
 - 💡 Built with scalability in mind – the architecture supports easy extension (e.g., charts, portfolio features).
 
 ---
@@ -54,7 +59,6 @@ Some of the endpoints I use:
 
 ## 🏗️ Project Structure
 
-```
 
 CryptoWatch/
 ├── data/
@@ -65,19 +69,19 @@ CryptoWatch/
 ├── viewmodel/        # ViewModel classes
 ├── fragments/
 │   ├── trending/
+│   ├── chart/
 │   ├── search/
 │   └── saved/
 ├── utils/            # RecyclerView adapters, UI helpers
 
-````
 
 ---
 
 ## 📸 UI Screenshots
 
-| Trending | Search | Saved |
-|---------|--------|-------|
-| ![Trending](screenshots/trending.png) | ![Search](screenshots/search.png) | ![Saved](screenshots/saved.png) |
+| Trending | Search | Saved | Chart |
+|---------|--------|-------|-------|
+| ![Trending](screenshots/trending.png) | ![Search](screenshots/search.png) | ![Saved](screenshots/saved.png) | ![Chart](screenshots/chart.png) |
 
 ---
 
@@ -98,12 +102,13 @@ CryptoWatch/
 
 ## 🧪 What's Next?
 
-* ✅ Trending, Search, and Saved features implemented
+* ✅ Trending, Search, and Saved features implemented  
+* ✅ Candlestick chart (MPAndroidChart) added
+* ✅ RoomDB-backed persistence implemented
 * 🧠 Coming Soon:
-  * RoomDB-backed persistence
   * Portfolio simulator
-  * Candlestick chart (MPAndroidChart)
   * Dark mode support
+
 ---
 
 ## 🙋‍♂️ About Me
@@ -112,4 +117,3 @@ I’m a passionate Android developer exploring modern app development techniques
 Feel free to reach out or fork the repo!
 
 [🔗 GitHub Profile](https://github.com/mat-in)
-
